@@ -153,6 +153,8 @@ if prompt:
 
     with st.chat_message("user"):
         st.markdown(prompt)
+    with st.chat_message("assistant"):
+        with st.spinner("Analyzing like a VC investor..."):
 
    response = client.chat.completions.create(
     model=model_name,
