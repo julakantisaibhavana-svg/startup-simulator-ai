@@ -1,5 +1,5 @@
 import streamlit as st
-import ollama
+from groq import Groq
 import json
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -40,7 +40,8 @@ if "messages" not in st.session_state:
 # ======================
 # MODEL
 # ======================
-model_name = "llama3.2"
+client = Groq(api_key=st.secrets["GROQ_API_KEY"])
+model_name = "llama-3.3-70b-versatile"
 
 # ======================
 # SIDEBAR & REAL-TIME APPROACH
@@ -153,21 +154,20 @@ if prompt:
     with st.chat_message("user"):
         st.markdown(prompt)
 
-    with st.chat_message("assistant"):
-        with st.spinner("Analyzing like a VC investor..."):
+   response = client.chat.completions.create(
+    model=model_name,
+    messages=[
+        SYSTEM_PROMPT,
+        {
+            "role": "user",
+            "content": prompt
+        }
+    ],
+    temperature=temperature,
+    max_tokens=1200,
+)
 
-            response = ollama.chat(
-                model=model_name,
-                messages=[SYSTEM_PROMPT, st.session_state.messages[-1]],
-                format="json",
-                options={
-                    "temperature": temperature,
-                    "num_predict": 1000
-                }
-            )
-
-            raw_output = response["message"]["content"]
-
+raw_output = response.choices[0].message.content
             # ======================
             # PARSE JSON
             # ======================
