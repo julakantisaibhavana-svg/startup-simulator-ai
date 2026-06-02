@@ -156,20 +156,20 @@ if prompt:
     with st.chat_message("assistant"):
         with st.spinner("Analyzing like a VC investor..."):
 
-   response = client.chat.completions.create(
-    model=model_name,
-    messages=[
-        SYSTEM_PROMPT,
-        {
-            "role": "user",
-            "content": prompt
-        }
-    ],
-    temperature=temperature,
-    max_tokens=1200,
-)
+            response = client.chat.completions.create(
+                 model=model_name,
+                 messages=[
+                 SYSTEM_PROMPT,
+                     {
+                      "role": "user",
+                      "content": prompt
+                     }
+                 ],
+                  temperature=temperature,
+                  max_tokens=1200,
+            )
 
-raw_output = response.choices[0].message.content
+            raw_output = response.choices[0].message.content
             # ======================
             # PARSE JSON
             # ======================
